@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Add Book</title>
+</head>
+<body>
+    <form action="/add_book/" method="post">
+        {% csrf_token %}
+        title : <input type="text" name="title"/>
+        price : <input type="text" name="price"/>
+        publish : <input type="text" name="publish"/>
+        pub_date : <input type="text" name="pub_date"/>
+        <input type="submit" value="add">
+    </form>
+</body>
+</html>
