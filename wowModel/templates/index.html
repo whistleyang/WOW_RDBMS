@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}"/>  
 </head>  
 <body>  
+<div id="user">
+    <a href="/logout">Logout</a>
+</div>
 <form method="POST" class="post-form" action="/emp">  
         {% csrf_token %}  
     <div class="container">  

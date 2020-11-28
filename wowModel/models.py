@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 class Test(models.Model):
@@ -12,6 +13,7 @@ class Book(models.Model):
     pub_date = models.DateField()
 
 class Employee(models.Model):  
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default="")
     eid = models.CharField(max_length=20)  
     ename = models.CharField(max_length=100)  
     eemail = models.EmailField()  

@@ -6,7 +6,10 @@
     {% load static %}  
     <link rel="stylesheet" href="{% static 'css/style.css' %}"/>  
 </head>  
-<body>  
+<body>
+<div id="user">
+    <a href="/logout">Logout</a>
+</div>
 <form method="POST" class="post-form" action="/update/{{employee.id}}">  
         {% csrf_token %}  
     <div class="container">  
