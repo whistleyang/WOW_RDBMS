@@ -4,7 +4,7 @@
     <div class="jumbotron">
       <h1>Login here :</h1>
 <form method="post" action="/accounts/login/">
-          {% csrf_token %}
+          {% csrf_token %},
           {# A more "HTML" way of creating the login form#}
           <label for="username">Username:</label>
           <input type="text" name="username" placeholder="Username">
