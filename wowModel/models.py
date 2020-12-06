@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Test(models.Model):
@@ -20,3 +21,16 @@ class Employee(models.Model):
     econtact = models.CharField(max_length=15)  
     class Meta:  
         db_table = "employee"  
+
+class Customer(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    fname = models.CharField(max_length=32)
+    lname = models.CharField(max_length=32)
+    country = models.CharField(max_length=32)
+    state = models.CharField(max_length=32)
+    city = models.CharField(max_length=32)
+    street = models.CharField(max_length=50)
+    zipcode = models.DecimalField(max_digits=5,decimal_places=0)
+    email = models.EmailField()
+    phone = models.DecimalField(max_digits=11, decimal_places=0)
+    cust_type = models.CharField(max_length=1)

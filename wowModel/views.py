@@ -1,9 +1,34 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import EmployeeForm
+from .forms import EmployeeForm, UserForm, CustomerForm
 from .models import Employee
 from django.contrib import auth
 # Create your views here.
+
+def index(request):
+    return render(request, 'index.html')
+
+def register(request):
+    registered= False
+    if request.method == 'POST':
+        user_form = UserForm(request.POST)
+        customer_form = CustomerForm(request.POST)
+        if user_form.is_valid() and customer_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
+            customer = customer_form.save(commit=False)
+            customer.user = user
+            customer.save()
+            registered = True
+    else:
+        user_form = UserForm()
+        customer_form = CustomerForm()
+    return render(request, 'register.html', 
+        {'user_form':user_form, 
+        'customer_form':customer_form,
+        'registered':registered})
+
 
 def login(request):
     if request.method == "POST":
@@ -32,7 +57,7 @@ def emp(request):
                 pass
     else:
         form = EmployeeForm()
-    return render(request, 'index.html', {'form':form})
+    return render(request, 'add_emp.html', {'form':form})
 
 @login_required
 def show(request):

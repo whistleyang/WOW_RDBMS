@@ -1,15 +1,7 @@
-<!DOCTYPE html>  
-<html lang="en">  
-<head>  
-    <meta charset="UTF-8">  
-    <title>Employee Records</title>  
-     {% load static %}  
-    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>  
-</head>  
-<body> 
-    <div id="user">
-        <a href="/logout">Logout</a>
-    </div>
+{% extends "base.html" %}
+{% load static %}
+{% block body_block %}
+
 <table class="table table-striped table-bordered table-sm">  
     <thead class="thead-dark">  
     <tr>  
@@ -38,5 +30,4 @@
 <br>  
 <br>  
 <center><a href="/emp" class="btn btn-primary">Add New Record</a></center>  
-</body>  
-</html>  
+{% endblock %}

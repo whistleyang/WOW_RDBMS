@@ -1,56 +1,13 @@
-<!DOCTYPE html>  
-<html lang="en">  
-<head>  
-    <meta charset="UTF-8">  
-    <title>Index</title>  
-    {% load static %}  
-    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>  
-</head>  
-<body>  
-<div id="user">
-    <a href="/logout">Logout</a>
+{% extends "base.html" %}
+{% block body_block %}
+<div class="container">
+  <div class="jumbotron">
+    <h1>Welcome to the Djungle !</h1>
+    {% if user.is_authenticated %}
+        <h2>Hello {{ user.username }}</h2>
+    {% else %}
+        <h2>Register or Login if you'd like to</h2>
+    {% endif %}
+  </div>
 </div>
-<form method="POST" class="post-form" action="/emp">  
-        {% csrf_token %}  
-    <div class="container">  
-<br>  
-    <div class="form-group row">  
-    <label class="col-sm-1 col-form-label"></label>  
-    <div class="col-sm-4">  
-    <h3>Enter Details</h3>  
-    </div>  
-  </div>  
-    <div class="form-group row">  
-    <label class="col-sm-2 col-form-label">Employee Id:</label>  
-    <div class="col-sm-4">  
-      {{ form.eid }}  
-    </div>  
-  </div>  
-  <div class="form-group row">  
-    <label class="col-sm-2 col-form-label">Employee Name:</label>  
-    <div class="col-sm-4">  
-      {{ form.ename }}  
-    </div>  
-  </div>  
-    <div class="form-group row">  
-    <label class="col-sm-2 col-form-label">Employee Email:</label>  
-    <div class="col-sm-4">  
-      {{ form.eemail }}  
-    </div>  
-  </div>  
-    <div class="form-group row">  
-    <label class="col-sm-2 col-form-label">Employee Contact:</label>  
-    <div class="col-sm-4">  
-      {{ form.econtact }}  
-    </div>  
-  </div>  
-    <div class="form-group row">  
-    <label class="col-sm-1 col-form-label"></label>  
-    <div class="col-sm-4">  
-    <button type="submit" class="btn btn-primary">Submit</button>  
-    </div>  
-  </div>  
-    </div>  
-</form>  
-</body>  
-</html>  
+{% endblock %}
