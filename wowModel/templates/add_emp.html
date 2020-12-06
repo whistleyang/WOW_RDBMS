@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 {% block body_block %}
 
-<form method="POST" class="post-form" action="/emp">  
+
+  <form enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" name="" value="add">
+  </form>
+<!-- <form method="POST" class="post-form" action="/emp">  
         {% csrf_token %}  
     <div class="container">  
 <br>  
@@ -42,6 +48,6 @@
     </div>  
   </div>  
     </div>  
-</form>  
+</form>   -->
 
 {% endblock %}

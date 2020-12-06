@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import EmployeeForm, UserForm, CustomerForm
-from .models import Employee
+from .forms import EmployeeForm, UserForm, CustomerForm, RecordForm
+from .models import Employee, Rental_Record
 from django.contrib import auth
 # Create your views here.
 
@@ -46,7 +46,8 @@ def login(request):
 @login_required
 def emp(request):
     if request.method == "POST":
-        form = EmployeeForm(request.POST)
+        #form = EmployeeForm(request.POST)
+        form = RecordForm(request.POST)
         if form.is_valid():
             try:
                 empl = form.save(commit=False)
@@ -56,35 +57,46 @@ def emp(request):
             except:
                 pass
     else:
-        form = EmployeeForm()
+        #form = EmployeeForm()
+        form = RecordForm()
     return render(request, 'add_emp.html', {'form':form})
 
 @login_required
 def show(request):
     if request.user.is_superuser:
-        employees = Employee.objects.all()
+        #employees = Employee.objects.all()
+        records = Rental_Record.objects.all()
     else:
-        employees = Employee.objects.filter(user=request.user)
-    return render(request, "show.html", {'employees': employees})
+        #employees = Employee.objects.filter(user=request.user)
+        records = Rental_Record.objects.filter(user=request.user)
+    #return render(request, "show.html", {'employees': employees})
+    return render(request, 'show.html', {'records':records})
 
 @login_required
 def edit(request, id):
-    employee = Employee.objects.get(id=id)
-    return render(request, 'edit.html', {'employee':employee})
+    #employee = Employee.objects.get(id=id)
+    record = Rental_Record.objects.get(record_id=id)
+    #return render(request, 'edit.html', {'employee':employee})
+    return render(request, 'edit.html', {'record':record})
 
 @login_required
 def update(request, id):
-    employee = Employee.objects.get(id=id)
-    form = EmployeeForm(request.POST, instance=employee)
+    #employee = Employee.objects.get(id=id)
+    #form = EmployeeForm(request.POST, instance=employee)
+    record = Rental_Record.objects.get(record_id=id)
+    form = RecordForm(request.POST, instance=record)
     if form.is_valid():
         form.save()
         return redirect("/show")
-    return render(request, "edit.html", {'employee:employee'})
+    #return render(request, "edit.html", {'employee:employee'})
+    return render(request, 'edit.html', {'record':record})
 
 @login_required
 def destroy(request, id):
-    employee = Employee.objects.get(id=id)
-    employee.delete()
+    #employee = Employee.objects.get(id=id)
+    #employee.delete()
+    record = Rental_Record.objects.get(record_id=id)
+    record.delete()
     return redirect("/show")
 
 @login_required
