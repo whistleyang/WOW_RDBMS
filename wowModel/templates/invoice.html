@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body_block %}
+
+<table class="table table-striped table-bordered table-sm">  
+    <thead class="thead-dark">  
+    <tr>  
+        <th>Record ID</th>  
+        <th>Invoice Datetime</th>  
+        <th>Invoice Amount</th>  
+        
+    </tr>  
+    </thead>  
+    <tbody>  
+    <tr>  
+        <td>{{ invoice.record_id }}</td>
+        <td>{{ invoice.idate }}</td>  
+        <td>{{ invoice.amount }}</td>  
+    </tr>  
+    </tbody>  
+</table>  
+
+<form method="post">
+    {% csrf_token %},
+    {# A more "HTML" way of creating the login form#}
+    <label> Payment Method :</label>
+    <input type="text" name="method" placeholder="">
+    <label> Card Number :</label>
+    <input type="text" name="card_num" placeholder="">
+    <input type="submit" class="btn btn-primary" name="" value="Pay it!">
+    <a href="/show" class="btn btn-primary">Cancel</a>
+</form>
+<br>  
+<br>  
+
+{% endblock %}

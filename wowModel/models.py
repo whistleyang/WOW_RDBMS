@@ -34,20 +34,6 @@ class Vehicle(models.Model):
     class Meta:  
         db_table = "vehicle"  
 
-class Rental_Record(models.Model):
-    record_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    pickup_date =  models.DateField()
-    dropoff_date = models.DateField()
-    start_odo = models.DecimalField(max_digits=10,decimal_places=0)
-    end_odo = models.DecimalField(max_digits=10,decimal_places=0)
-    odo_limit = models.DecimalField(max_digits=10,decimal_places=0,null=True, blank=True)
-    vehicle = models.ForeignKey("Vehicle", on_delete=models.CASCADE)
-    pu_location = models.ForeignKey("Location", on_delete=models.CASCADE, related_name='pu_location_id')
-    do_location = models.ForeignKey("Location", on_delete=models.CASCADE, related_name='do_location_id')
-    class Meta:  
-        db_table = "rental_record"  
-
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     customer_id = models.AutoField(primary_key=True)
@@ -63,6 +49,21 @@ class Customer(models.Model):
     cust_type = models.CharField(max_length=1)
     class Meta:  
         db_table = "customer"  
+
+class Rental_Record(models.Model):
+    record_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    pickup_date =  models.DateField()
+    dropoff_date = models.DateField()
+    start_odo = models.DecimalField(max_digits=10,decimal_places=0)
+    end_odo = models.DecimalField(max_digits=10,decimal_places=0)
+    odo_limit = models.DecimalField(max_digits=10,decimal_places=0,null=True, blank=True)
+    vehicle = models.ForeignKey("Vehicle", on_delete=models.CASCADE)
+    pu_location = models.ForeignKey("Location", on_delete=models.CASCADE, related_name='pu_location_id')
+    do_location = models.ForeignKey("Location", on_delete=models.CASCADE, related_name='do_location_id')
+    class Meta:  
+        db_table = "rental_record"  
 
 class Coupon(models.Model):
     coupon_id = models.DecimalField(max_digits=4,decimal_places=0,primary_key=True)
@@ -95,3 +96,21 @@ class Corp_cust(models.Model):
     corp = models.ForeignKey(Corporation, on_delete=models.CASCADE)
     class Meta:  
         db_table = "corp_cust" 
+
+class Invoice(models.Model):
+    invoice_id = models.AutoField(primary_key=True)
+    idate = models.DateField()
+    amount = models.DecimalField(max_digits=10,decimal_places=2)
+    record = models.OneToOneField(Rental_Record, on_delete=models.CASCADE)
+    class Meta:  
+        db_table = "invoice"
+
+class Payment(models.Model):
+    payment_id = models.AutoField(primary_key=True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    pdate = models.DateField()
+    method = models.CharField(max_length=10)
+    card_num = models.DecimalField(max_digits=32,decimal_places=0)
+    invoice = models.OneToOneField(Invoice, on_delete=models.CASCADE)
+    class Meta:  
+        db_table = "payment"

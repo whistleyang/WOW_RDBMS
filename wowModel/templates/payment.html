@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% block body_block %}
+Your Payment had successfully received!!
+<table class="table table-striped table-bordered table-sm">  
+    <thead class="thead-dark">  
+    <tr>  
+        <th>Payment ID</th>  
+        <th>Customer ID</th>  
+        <th>Invoice ID</th> 
+        <th>Payment Method</th> 
+        <th>Card Number</th> 
+        <th>PayDay</th>  
+    </tr>  
+    </thead>  
+    <tbody>  
+    <tr>  
+        <td>{{ payment.payment_id }}</td>
+        <td>{{ payment.customer.customer_id }}</td>  
+        <td>{{ payment.invoice.invoice_id }}</td>  
+        <td>{{ payment.method }}</td>  
+        <td>{{ payment.card_num }}</td>  
+        <td>{{ payment.pdate }}</td>  
+    </tr>  
+    </tbody>  
+</table>  
+<center>
+    <a href="/show" class="btn btn-primary">Return</a>
+</center>  
+{% endblock %}

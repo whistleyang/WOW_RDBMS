@@ -1,5 +1,5 @@
 from django import forms
-from .models import Customer, Indi_cust, Corp_cust
+from .models import Customer, Indi_cust, Corp_cust, Payment
 from .models import Rental_Record
 from django.contrib.auth.models import User
 
@@ -29,7 +29,7 @@ class Corp_custForm(forms.ModelForm):
 class RecordForm(forms.ModelForm):
     class Meta:
         model = Rental_Record
-        fields = ['pickup_date', 'dropoff_date', 'start_odo',
+        fields = ['customer', 'pickup_date', 'dropoff_date', 'start_odo',
             'end_odo', 'odo_limit', 'vehicle', 'pu_location', 'do_location' ]
         widgets = {
             'pickup_date': forms.DateInput(attrs={'type': 'date'}),

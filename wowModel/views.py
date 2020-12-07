@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserForm, CustomerForm, RecordForm, Indi_CustForm, Corp_custForm
-from .models import Rental_Record, Customer
+from .models import Rental_Record, Customer, Veh_class, Vehicle, Invoice, Payment
 from django.contrib import auth
+from django.utils import timezone
 # Create your views here.
 
 def index(request):
@@ -62,8 +63,8 @@ def login(request):
 
 @login_required
 def emp(request):
+    # employee auth
     if request.method == "POST":
-        #form = EmployeeForm(request.POST)
         form = RecordForm(request.POST)
         if form.is_valid():
             try:
@@ -74,47 +75,71 @@ def emp(request):
             except:
                 pass
     else:
-        #form = EmployeeForm()
         form = RecordForm()
     return render(request, 'add_emp.html', {'form':form})
 
 @login_required
 def show(request):
     if request.user.is_superuser:
-        #employees = Employee.objects.all()
         records = Rental_Record.objects.all()
     else:
-        #employees = Employee.objects.filter(user=request.user)
         records = Rental_Record.objects.filter(user=request.user)
-    #return render(request, "show.html", {'employees': employees})
     return render(request, 'show.html', {'records':records})
 
-@login_required
-def edit(request, id):
-    #employee = Employee.objects.get(id=id)
-    record = Rental_Record.objects.get(record_id=id)
-    #return render(request, 'edit.html', {'employee':employee})
-    return render(request, 'edit.html', {'record':record})
 
 @login_required
 def update(request, id):
-    #employee = Employee.objects.get(id=id)
-    #form = EmployeeForm(request.POST, instance=employee)
+    # employee auth
     record = Rental_Record.objects.get(record_id=id)
     form = RecordForm(request.POST, instance=record)
     if form.is_valid():
         form.save()
         return redirect("/show")
-    #return render(request, "edit.html", {'employee:employee'})
     return render(request, 'edit.html', {'form': form})
 
 @login_required
 def destroy(request, id):
-    #employee = Employee.objects.get(id=id)
-    #employee.delete()
+    # employee auth
     record = Rental_Record.objects.get(record_id=id)
     record.delete()
     return redirect("/show")
+
+@login_required
+def gene_invoice(request, id):
+    # we need a new web to list invoice
+    record = Rental_Record.objects.get(record_id=id)
+    idate = timezone.localtime()
+    try:
+        invoice = Invoice.objects.get(record=record)
+        invoice.idate=idate
+        invoice.save()
+    except:
+        vehicle = record.vehicle
+        veh_class = vehicle.class_id
+        rent_duration = (record.dropoff_date - record.pickup_date).days
+        overfee = 0
+        if record.odo_limit:
+            total_odo = record.end_odo - record.start_odo
+            if total_odo > rent_duration * record.odo_limit:
+                overfee = veh_class.fees * \
+                    (total_odo - rent_duration * record.odo_limit)
+        amount = rent_duration * veh_class.rental_rate + overfee
+        invoice = Invoice.objects.create(idate=idate, amount=amount, record=record)
+    # add discount
+
+
+    # create payment and redirect to payment page
+    if request.method == "POST":
+        method = request.POST.get("method")
+        card_num = request.POST.get("card_num")
+        pdate = timezone.localtime()
+        customer = record.customer
+        payment = Payment.objects.create(customer=customer, pdate=pdate,
+            method=method, card_num=card_num, invoice=invoice)
+        # after payment, we need to delete this record
+        return render(request, 'payment.html', {'payment': payment})
+
+    return render(request, 'invoice.html', {'invoice': invoice})
 
 @login_required
 def logout(request):
