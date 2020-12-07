@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 {% block body_block %}
 
-<form method="POST" class="post-form" action="/update/{{employee.id}}">  
+<form enctype="multipart/form-data" method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" name="" value="Update">
+</form>
+
+<!-- <form method="POST" class="post-form" action="/update/{{record.record_id}}">  
         {% csrf_token %}  
     <div class="container">  
 <br>  
@@ -12,27 +18,51 @@
     </div>  
   </div>  
     <div class="form-group row">  
-    <label class="col-sm-2 col-form-label">Employee Id:</label>  
+    <label class="col-sm-2 col-form-label">Record Id:</label>  
     <div class="col-sm-4">  
-        <input type="text" name="eid" id="id_eid" required maxlength="20" value="{{ employee.eid }}"/>  
+        <input type="text" name="record_id" id="id_record_id" required maxlength="20" value="{{ record.record_id }}"/>  
     </div>  
   </div>  
   <div class="form-group row">  
-    <label class="col-sm-2 col-form-label">Employee Name:</label>  
+    <label class="col-sm-2 col-form-label">Pick-up Date:</label>  
     <div class="col-sm-4">  
-        <input type="text" name="ename" id="id_ename" required maxlength="100" value="{{ employee.ename }}" />  
+        <input type="date" name="pudate" id="id_pudate" required maxlength="100" value="{{ record.pickup_date }}" />  
     </div>  
   </div>  
     <div class="form-group row">  
-    <label class="col-sm-2 col-form-label">Employee Email:</label>  
+    <label class="col-sm-2 col-form-label">Drop-off Date:</label>  
     <div class="col-sm-4">  
-        <input type="email" name="eemail" id="id_eemail" required maxlength="254" value="{{ employee.eemail }}" />  
+        <input type="date" name="dodate"" id="id_dodate" required maxlength="254" value="{{ record.dropoff_date }}" />  
     </div>  
   </div>  
     <div class="form-group row">  
-    <label class="col-sm-2 col-form-label">Employee Contact:</label>  
+    <label class="col-sm-2 col-form-label">Start Odometer:</label>  
     <div class="col-sm-4">  
-        <input type="text" name="econtact" id="id_econtact" required maxlength="15" value="{{ employee.econtact }}" />  
+        <input type="text" name="start_odo" id="id_start_odo" required maxlength="15" value="{{ record.start_odo }}" />  
+    </div>
+  </div>  
+  <div class="form-group row">  
+  <label class="col-sm-2 col-form-label">End Odometer:</label>  
+  <div class="col-sm-4">  
+      <input type="text" name="end_odo" id="id_end_odo" required maxlength="15" value="{{ record.end_odo }}" />  
+  </div>  
+</div>  
+<div class="form-group row">  
+<label class="col-sm-2 col-form-label">Odometer Limitation:</label>  
+<div class="col-sm-4">  
+    <input type="text" name="odo_limit" id="id_odo_limit" required maxlength="15" value="{{ record.odo_limit }}" />  
+</div>  
+</div>  
+<div class="form-group row">  
+<label class="col-sm-2 col-form-label">Vehicle:</label>  
+<div class="col-sm-4">  
+    <input type="text" name="vehicle" id="id_vehicle" required maxlength="15" value="{{ record.vehicle }}" />  
+</div>  
+  </div>  
+    <div class="form-group row">  
+    <label class="col-sm-2 col-form-label">Pick-up Location:</label>  
+    <div class="col-sm-4">  
+        <input type="text" name="start_odo" id="id_start_odo" required maxlength="15" value="{{ record.start_odo }}" />  
     </div>  
   </div>  
     <div class="form-group row">  
@@ -42,5 +72,5 @@
     </div>  
   </div>  
     </div>  
-</form> 
+</form>  -->
 {% endblock %}

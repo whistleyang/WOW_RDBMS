@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import EmployeeForm, UserForm, CustomerForm, RecordForm
-from .models import Employee, Rental_Record
+from .forms import UserForm, CustomerForm, RecordForm
+from .models import Rental_Record
 from django.contrib import auth
 # Create your views here.
 
@@ -89,7 +89,7 @@ def update(request, id):
         form.save()
         return redirect("/show")
     #return render(request, "edit.html", {'employee:employee'})
-    return render(request, 'edit.html', {'record':record})
+    return render(request, 'edit.html', {'form': form})
 
 @login_required
 def destroy(request, id):

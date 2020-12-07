@@ -3,25 +3,6 @@ from django.conf import settings
 from django.contrib.auth.models import User
 
 # Create your models here.
-class Test(models.Model):
-    name = models.CharField(max_length=20)
-
-class Book(models.Model):
-    id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=32)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
-    publish = models.CharField(max_length=32)
-    pub_date = models.DateField()
-
-class Employee(models.Model):  
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default="")
-    eid = models.CharField(max_length=20)  
-    ename = models.CharField(max_length=100)  
-    eemail = models.EmailField()  
-    econtact = models.CharField(max_length=15)  
-    class Meta:  
-        db_table = "employee"  
-
 class Veh_class(models.Model):
     class_id = models.DecimalField(max_digits=4,decimal_places=0,primary_key=True)
     class_name = models.CharField(max_length=32)
@@ -49,12 +30,12 @@ class Vehicle(models.Model):
     vin = models.CharField(max_length=17)
     lp_num = models.CharField(max_length=10)
     class_id = models.ForeignKey(Veh_class, on_delete=models.CASCADE)
-    location = models.ForeignKey(Location, on_delete=models.CASCADE, default="")
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
     class Meta:  
         db_table = "vehicle"  
 
 class Rental_Record(models.Model):
-    record_id = models.DecimalField(max_digits=8,decimal_places=0,primary_key=True)
+    record_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     pickup_date =  models.DateField()
     dropoff_date = models.DateField()
@@ -68,7 +49,8 @@ class Rental_Record(models.Model):
         db_table = "rental_record"  
 
 class Customer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    customer_id = models.AutoField(primary_key=True)
     fname = models.CharField(max_length=32)
     lname = models.CharField(max_length=32)
     country = models.CharField(max_length=32)
@@ -79,4 +61,5 @@ class Customer(models.Model):
     email = models.EmailField()     
     phone = models.DecimalField(max_digits=11, decimal_places=0)
     cust_type = models.CharField(max_length=1)
-
+    class Meta:  
+        db_table = "customer"  
