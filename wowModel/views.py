@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UserForm, CustomerForm, RecordForm
-from .models import Rental_Record
+from .forms import UserForm, CustomerForm, RecordForm, Indi_CustForm, Corp_custForm
+from .models import Rental_Record, Customer
 from django.contrib import auth
 # Create your views here.
 
@@ -9,7 +9,6 @@ def index(request):
     return render(request, 'index.html')
 
 def register(request):
-    registered= False
     if request.method == 'POST':
         user_form = UserForm(request.POST)
         customer_form = CustomerForm(request.POST)
@@ -20,15 +19,33 @@ def register(request):
             customer = customer_form.save(commit=False)
             customer.user = user
             customer.save()
-            registered = True
+            return redirect('/cust_details/'+str(customer.customer_id))
     else:
         user_form = UserForm()
         customer_form = CustomerForm()
     return render(request, 'register.html', 
-        {'user_form':user_form, 
-        'customer_form':customer_form,
-        'registered':registered})
+        {'user_form':user_form, 'customer_form':customer_form})
 
+def cust_details(request, id):
+    registered = False
+    customer = Customer.objects.get(customer_id=id)
+    if customer.cust_type == 'I':
+        form = Indi_CustForm()
+    else:
+        form = Corp_custForm()
+    if request.method == "POST":
+        if customer.cust_type == 'I':
+            form = Indi_CustForm(request.POST)
+        else:
+            form = Corp_custForm(request.POST)
+        if form.is_valid():
+            cust = form.save(commit=False)
+            cust.customer = customer
+            cust.save()
+            registered = True
+    return render(request, 'cust_details.html', 
+        {'form':form, 'registered':registered})
+    
 
 def login(request):
     if request.method == "POST":
@@ -40,7 +57,7 @@ def login(request):
             path = request.GET.get("next") or "/show"
             return redirect(path)
         else:
-            redirect('accounts/login/')
+            return redirect('/accounts/login/')
     return render(request, 'login.html')
 
 @login_required
@@ -102,5 +119,5 @@ def destroy(request, id):
 @login_required
 def logout(request):
     auth.logout(request)
-    return redirect('accounts/login/')
+    return redirect('/accounts/login/')
 

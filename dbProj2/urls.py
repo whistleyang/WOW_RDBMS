@@ -21,6 +21,7 @@ from django.conf.urls import url
 urlpatterns = [
     path('index', views.index),
     path('register', views.register),
+    path('cust_details/<int:id>', views.cust_details),
     path('accounts/login/', views.login),
     path('logout', views.logout),
     path('admin/', admin.site.urls),

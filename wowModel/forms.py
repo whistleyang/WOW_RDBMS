@@ -1,5 +1,5 @@
 from django import forms
-from .models import Customer
+from .models import Customer, Indi_cust, Corp_cust
 from .models import Rental_Record
 from django.contrib.auth.models import User
 
@@ -16,6 +16,15 @@ class CustomerForm(forms.ModelForm):
         fields = ['fname', 'lname', 'country', 'state', 'city',
              'street', 'zipcode', 'email', 'phone', 'cust_type']
 
+class Indi_CustForm(forms.ModelForm):
+    class Meta:
+        model = Indi_cust
+        fields = ['dl_num', 'insur_com_name', 'insur_polic_num']
+
+class Corp_custForm(forms.ModelForm):
+    class Meta:
+        model = Corp_cust
+        fields = ['employee_id', 'corp']
 
 class RecordForm(forms.ModelForm):
     class Meta:

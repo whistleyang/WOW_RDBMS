@@ -63,3 +63,35 @@ class Customer(models.Model):
     cust_type = models.CharField(max_length=1)
     class Meta:  
         db_table = "customer"  
+
+class Coupon(models.Model):
+    coupon_id = models.DecimalField(max_digits=4,decimal_places=0,primary_key=True)
+    discount = models.DecimalField(max_digits=4,decimal_places=2)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    class Meta:  
+        db_table = "coupon"  
+
+class Corporation(models.Model):
+    corp_id = models.AutoField(primary_key=True)
+    corp_name = models.CharField(max_length=32)
+    corp_reg_num = models.CharField(max_length=20)
+    corp_discount = models.DecimalField(max_digits=3,decimal_places=2)
+    class Meta:  
+        db_table = "corporation"  
+
+class Indi_cust(models.Model):
+    customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
+    dl_num = models.CharField(max_length=15)
+    insur_com_name = models.CharField(max_length=32)
+    insur_polic_num = models.CharField(max_length=12)
+    coupon = models.ManyToManyField(Coupon, null=True, blank=True)
+    class Meta:  
+        db_table = "indi_cust"  
+
+class Corp_cust(models.Model):
+    customer = models.OneToOneField(Customer, on_delete=models.CASCADE)
+    employee_id = models.DecimalField(max_digits=32,decimal_places=0)
+    corp = models.ForeignKey(Corporation, on_delete=models.CASCADE)
+    class Meta:  
+        db_table = "corp_cust" 
