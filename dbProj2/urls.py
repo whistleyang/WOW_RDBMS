@@ -23,6 +23,8 @@ urlpatterns = [
     path('register', views.register),
     path('cust_details/<int:id>', views.cust_details),
     path('accounts/login/', views.login),
+    path('info', views.profile),
+    path('edit_profile', views.edit_profile),
     path('logout', views.logout),
     path('admin/', admin.site.urls),
     path('emp', views.emp),

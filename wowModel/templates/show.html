@@ -31,9 +31,12 @@
         <td>{{ record.do_location }}</td> 
 
         <td>  
+            {% if user.is_superuser %}
             <a href="/edit/{{ record.record_id }}"><span class="glyphicon glyphicon-pencil" >Edit</span></a>  
             <a href="/delete/{{ record.record_id }}">Delete</a>  
+            {% else %}
             <a href="/invoice/{{ record.record_id }}">Invoice</a>  
+            {% endif %}
         </td>  
     </tr>  
 {% endfor %}  
@@ -41,5 +44,9 @@
 </table>  
 <br>  
 <br>  
-<center><a href="/emp" class="btn btn-primary">Add New Record</a></center>  
+<center>
+    {% if user.is_superuser %}
+    <a href="/emp" class="btn btn-primary">Add New Record</a>
+    {% endif %}
+</center>  
 {% endblock %}

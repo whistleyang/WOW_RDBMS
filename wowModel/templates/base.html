@@ -15,6 +15,11 @@
           <li><a class="navbar-link" href="/register">Register</a></li>     
           {# Some logic on what to display for last item#}
           {% if user.is_authenticated %}
+            {% if not user.is_superuser %}
+            <li><a href="/info">Personal Info</a></li>
+            {% endif %}
+            <li><a href="/show">Vehicles</a></li>
+            <li><a href="/show">Rental Record</a></li>
             <li><a href="/logout">Logout</a></li>
           {% else %}
             <li><a class="navbar-link" href="/accounts/login/">Login</a></li>

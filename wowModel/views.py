@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserForm, CustomerForm, RecordForm, Indi_CustForm, Corp_custForm
-from .models import Rental_Record, Customer, Veh_class, Vehicle, Invoice, Payment
+from .models import Rental_Record, Customer, Indi_cust, Corp_cust, \
+     Veh_class, Vehicle, Invoice, Payment
 from django.contrib import auth
 from django.utils import timezone
 # Create your views here.
@@ -62,6 +63,39 @@ def login(request):
     return render(request, 'login.html')
 
 @login_required
+def profile(request):
+    info = Customer.objects.get(user=request.user)
+    indi = False
+    if info.cust_type == 'I':
+        indi = True
+        details = Indi_cust.objects.get(customer=info)
+    else:
+        details = Corp_cust.objects.get(customer=info)
+    return render(request, 'profile.html', 
+        {'info':info, 'details':details, 'indi':indi})
+
+@login_required
+def edit_profile(request):
+    customer = Customer.objects.get(user=request.user)
+    cust_form = CustomerForm(request.POST, instance=customer)
+    if customer.cust_type == 'I':
+        detail = Indi_cust.objects.get(customer=customer)
+        detail_form = Indi_CustForm(request.POST, instance=detail)
+    else:
+        detail = Corp_cust.objects.get(customer=customer)
+        detail_form = Corp_custForm(request.POST, instance=detail)
+    if cust_form.is_valid() and detail_form.is_valid():
+        cust = cust_form.save(commit=False)
+        cust.user = request.user
+        cust.save()
+        detail = detail_form.save(commit=False)
+        detail.customer = cust
+        detail.save()
+        return redirect('/info')
+    return render(request, 'edit_profile.html', 
+        {'cust_form':cust_form, 'detail_form':detail_form})
+
+@login_required
 def emp(request):
     # employee auth
     if request.method == "POST":
@@ -69,7 +103,8 @@ def emp(request):
         if form.is_valid():
             try:
                 empl = form.save(commit=False)
-                empl.user = request.user
+                customer = empl.customer
+                empl.user = customer.user
                 form.save()
                 return redirect('/show')
             except:
