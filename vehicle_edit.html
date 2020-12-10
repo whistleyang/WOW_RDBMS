@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block body_block %}
+
+<form enctype="multipart/form-data" method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" name="" value="Update">
+</form>
+
+<!-- <form method="POST" class="post-form" action="/update/{{record.record_id}}">  
+        {% csrf_token %}  
+    <div class="container">  
+<br>  
+    <div class="form-group row">  
+    <label class="col-sm-1 col-form-label"></label>  
+    <div class="col-sm-4">  
+    <h3>Update Details</h3>  
+    </div>  
+  </div>  
+    <div class="form-group row">  
+    <label class="col-sm-2 col-form-label">Record Id:</label>  
+    <div class="col-sm-4">  
+        <input type="text" name="record_id" id="id_record_id" required maxlength="20" value="{{ record.record_id }}"/>  
+    </div>  
+  </div>  
+  <div class="form-group row">  
+    <label class="col-sm-2 col-form-label">Pick-up Date:</label>  
+    <div class="col-sm-4">  
+        <input type="date" name="pudate" id="id_pudate" required maxlength="100" value="{{ record.pickup_date }}" />  
+    </div>  
+  </div>  
+    <div class="form-group row">  
+    <label class="col-sm-2 col-form-label">Drop-off Date:</label>  
+    <div class="col-sm-4">  
+        <input type="date" name="dodate"" id="id_dodate" required maxlength="254" value="{{ record.dropoff_date }}" />  
+    </div>  
+  </div>  
+    <div class="form-group row">  
+    <label class="col-sm-2 col-form-label">Start Odometer:</label>  
+    <div class="col-sm-4">  
+        <input type="text" name="start_odo" id="id_start_odo" required maxlength="15" value="{{ record.start_odo }}" />  
+    </div>
+  </div>  
+  <div class="form-group row">  
+  <label class="col-sm-2 col-form-label">End Odometer:</label>  
+  <div class="col-sm-4">  
+      <input type="text" name="end_odo" id="id_end_odo" required maxlength="15" value="{{ record.end_odo }}" />  
+  </div>  
+</div>  
+<div class="form-group row">  
+<label class="col-sm-2 col-form-label">Odometer Limitation:</label>  
+<div class="col-sm-4">  
+    <input type="text" name="odo_limit" id="id_odo_limit" required maxlength="15" value="{{ record.odo_limit }}" />  
+</div>  
+</div>  
+<div class="form-group row">  
+<label class="col-sm-2 col-form-label">Vehicle:</label>  
+<div class="col-sm-4">  
+    <input type="text" name="vehicle" id="id_vehicle" required maxlength="15" value="{{ record.vehicle }}" />  
+</div>  
+  </div>  
+    <div class="form-group row">  
+    <label class="col-sm-2 col-form-label">Pick-up Location:</label>  
+    <div class="col-sm-4">  
+        <input type="text" name="start_odo" id="id_start_odo" required maxlength="15" value="{{ record.start_odo }}" />  
+    </div>  
+  </div>  
+    <div class="form-group row">  
+    <label class="col-sm-1 col-form-label"></label>  
+    <div class="col-sm-4">  
+    <button type="submit" class="btn btn-success">Update</button>  
+    </div>  
+  </div>  
+    </div>  
+</form>  -->
+{% endblock %}
