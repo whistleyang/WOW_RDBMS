@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserForm, CustomerForm, RecordForm, Indi_CustForm, Corp_custForm,VehicleForm
 from .models import Rental_Record, Customer, Indi_cust, Corp_cust, \
-     Veh_class, Vehicle, Invoice, Payment
+     Veh_class, Vehicle, Invoice, Payment, Location
 from django.contrib import auth
 from django.utils import timezone
 # Create your views here.
@@ -96,22 +96,56 @@ def edit_profile(request):
         {'cust_form':cust_form, 'detail_form':detail_form})
 
 @login_required
-def record_add(request):
+def add_record(request):
     # employee auth
+    customers = Customer.objects.all()
+    vehicles = Vehicle.objects.all()
+    locations = Location.objects.all()
     if request.method == "POST":
         form = RecordForm(request.POST)
         if form.is_valid():
             try:
-                empl = form.save(commit=False)
-                customer = empl.customer
-                empl.user = customer.user
+                record = form.save(commit=False)
+                customer = record.customer
+                record.user = customer.user
                 form.save()
                 return redirect('/show')
             except:
                 pass
     else:
         form = RecordForm()
-    return render(request, 'add_emp.html', {'form':form})
+    return render(request, 'add_emp.html', {'form': form, 
+        'customers':customers, 'vehicles':vehicles, 'locations':locations})
+
+@login_required
+def show(request):
+    if request.user.is_superuser:
+        records = Rental_Record.objects.all()
+    else:
+        records = Rental_Record.objects.filter(user=request.user)
+    return render(request, 'show.html', {'records':records})
+
+
+@login_required
+def update(request, id):
+    # employee auth
+    customers = Customer.objects.all()
+    vehicles = Vehicle.objects.all()
+    locations = Location.objects.all()
+    record = Rental_Record.objects.get(record_id=id)
+    form = RecordForm(request.POST, instance=record)
+    if form.is_valid():
+        form.save()
+        return redirect("/show")
+    return render(request, 'edit.html', {'form': form, 
+        'customers':customers, 'vehicles':vehicles, 'locations':locations})
+
+@login_required
+def destroy(request, id):
+    # employee auth
+    record = Rental_Record.objects.get(record_id=id)
+    record.delete()
+    return redirect("/show")
 
 @login_required
 def vehicle_add(request):
@@ -119,59 +153,32 @@ def vehicle_add(request):
         form = VehicleForm(request.POST)
         if form.is_valid():
             form.save()
+            return redirect('/vehi_show')
     else:
         form = VehicleForm()
-    return render(request, 'add_emp.html',{'form':form})
-
-@login_required
-def record_show(request):
-    if request.user.is_superuser:
-        records = Rental_Record.objects.all()
-    else:
-        records = Rental_Record.objects.filter(user=request.user)
-    return render(request, 'record_show.html', {'records':records})
+    return render(request, 'vehicle_add.html',{'form':form})
 
 @login_required
 def vehicle_show(request):
-    if request.user.is_superuser:
-        records = Vehicle.objects.all()
-    else:
-        records = Vehicle.objects.filter(user=request.user)
+    records = Vehicle.objects.all()
     return render(request, 'vehicle_show.html', {'records':records})
-
-@login_required
-def record_update(request, id):
-    # employee auth
-    record = Rental_Record.objects.get(record_id=id)
-    form = RecordForm(request.POST, instance=record)
-    if form.is_valid():
-        form.save()
-        return redirect("/show")
-    return render(request, 'record_edit.html', {'form': form})
 
 @login_required
 def vehicle_update(request, id):
     # employee auth
-    record = Vehicle.objects.get(record_id=id)
+    record = Vehicle.objects.get(vehicle_id=id)
     form = VehicleForm(request.POST, instance=record)
     if form.is_valid():
         form.save()
-        return redirect("/show")
+        return redirect("/vehi_show")
     return render(request, 'vehicle_edit.html', {'form': form})
-
-@login_required
-def record_destroy(request, id):
-    # employee auth
-    record = Rental_Record.objects.get(record_id=id)
-    record.delete()
-    return redirect("/show")
 
 @login_required
 def vehicle_destroy(request, id):
     # employee auth
-    record = Vehicle.objects.get(record_id=id)
+    record = Vehicle.objects.get(vehicle_id=id)
     record.delete()
-    return redirect("/show")
+    return redirect("/vehi_show")
 
 @login_required
 def gene_invoice(request, id):
